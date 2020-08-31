@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/css/mdb.min.css" rel="stylesheet">
+
+    <style>
+        #spinner{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>
+
+        <!-- Default form login -->
+        <form id="userForm" class="text-center border border-light p-5">
+
+            <input type="text" id="balance" name="balance" class="form-control mb-4 disabled" value="200">
+            <!-- Amount -->
+            <input type="text" id="amount" name="t_amount" class="form-control mb-4" placeholder="Amount">
+
+            <!-- Country currency-->
+            <select class="browser-default custom-select" name="t_currency" id="currency">
+                <option selected>Select your preference</option>
+                <option value=NGN class='val'>NGN</option>
+                <option value=KES class='val'>KES</option>
+                <option value=UGX class='val'>UGX</option>
+                <option value=ZMW class='val'>ZMW</option>  
+                <option value=TZS class='val'>TZS</option>            
+            </select>
+            
+            
+               <div>
+                <p>Exchange Rate</p>
+                <p id="exchange"></p>
+
+                <select class="browser-default custom-select mb-4" id="dropdown">
+                </select>
+
+                <input type="text" id="accNo" name="accNo" class="form-control mb-4" placeholder="Account Number">
+
+                <div id="foreign">
+                    <input type="text" id="name" name="name" class="form-control mb-4" placeholder="First Name">
+                    <input type="text" id="name" name="name" class="form-control mb-4" placeholder="Last Name">
+                    <input type="text" id="name" name="name" class="form-control mb-4" placeholder="Beneficiary Name">
+                    <input type="text" id="name" name="name" class="form-control mb-4" placeholder="Beneficiary Name">
+                    <input type="text" id="name" name="name" class="form-control mb-4" placeholder="Beneficiary Name">
+                    <input type="text" id="name" name="name" class="form-control mb-4" placeholder="Beneficiary Name">
+                </div>
+                <input type="text" id="name" name="name" class="form-control mb-4" placeholder="Beneficiary Name">
+
+                <center><div class="spinner-border" id="spinner"></div></center>
+
+                <div id="msg"></div>
+            </div>
+            <!-- Pay button, although could be excluded-->
+            <button class="btn btn-info btn-block my-4 btn-disabled" id="pay">Pay</button>
+
+        </form>
+        <!-- Default form login -->
+       
+    </div>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+
+    <script >
+        let countries = {
+            "NG" : [
+                {
+                    'First Bank of Nigeria' : {
+                        "code" : "011"
+                    }                
+                },
+                {
+                    'Sterling Mobile' : {
+                        "code" : "326"
+                    }                
+                },
+                {
+                    'Omoluabi Mortgage' : {
+                        "code" : "990"
+                    }                
+                },
+                {
+                    'ReadyCash (Parkway)' : {
+                        "code" : "311"
+                    }                
+                },
+                {
+                    'Zenith Bank' : {
+                        "code" : "311"
+                    }                
+                },
+                 {
+                    'Standard chartered Bank' : {
+                        "code" : "068"
+                    }                
+                },
+                 {
+                    'eTranzact' : {
+                        "code" : "306"
+                    }                
+                },
+                 {
+                    'Fidelity Bank' : {
+                        "code" : "070"
+                    }                
+                },
+                 {
+                    'CitiBank' : {
+                        "code" : "023"
+                    }                
+                },
+                 {
+                    'Unity Bank' : {
+                        "code" : "215"
+                    }                
+                },
+                 {
+                    'Access Money' : {
+                        "code" : "323"
+                    }                
+                },
+                 {
+                    'Eartholeum' : {
+                        "code" : "302"
+                    }                
+                },
+                 {
+                    'Money Box' : {
+                        "code" : "325"
+                    }                
+                },
+                 {
+                    'Hedonmark' : {
+                        "code" : "324"
+                    }                
+                },
+                 {
+                    'JAIZ Bank' : {
+                        "code" : "301"
+                    }                
+                },
+                 {
+                    'Ecobank Plc' : {
+                        "code" : "050"
+                    }                
+                },
+                 {
+                    'EcoMobile' : {
+                        "code" : "307"
+                    }                
+                },
+                 {
+                    'Fidelity Mobile' : {
+                        "code" : "318"
+                    }                
+                },
+                 {
+                    'TeasyMobile' : {
+                        "code" : "319"
+                    }                
+                },
+                 {
+                    'NIP Virtual Bank' : {
+                        "code" : "999"
+                    }                
+                },
+                 {
+                    'VTNetworks' : {
+                        "code" : "320"
+                    }                
+                },
+                 {
+                    'Stanbic IBTC Bank' : {
+                        "code" : "221"
+                    }                
+                },
+                 {
+                    'Fortis Microfinance Bank' : {
+                        "code" : "501"
+                    }                
+                },
+                 {
+                    'PayAttitude Online' : {
+                        "code" : "329"
+                    }                
+                },
+                 {
+                    'ZenithMobile' : {
+                        "code" : "322"
+                    }                
+                },
+                 {
+                    'ChamsMobile' : {
+                        "code" : "303"
+                    }                
+                },
+                 {
+                    'SafeTrust Mortgage Bank' : {
+                        "code" : "403"
+                    }                
+                },
+                 {
+                    'Convenant Microfinance Bank' : {
+                        "code" : "551"
+                    }                
+                },
+                 {
+                    'Imperial Homes Mortgage Bank' : {
+                        "code" : "415"
+                    }                
+                },
+                 {
+                    'NPF Microfinance Bank' : {
+                        "code" : "552"
+                    }                
+                },
+                 {
+                    'Parralex' : {
+                        "code" : "526"
+                    }                
+                },
+                 {
+                    'Wema Bank' : {
+                        "code" : "035"
+                    }                
+                },
+                 {
+                    'Enterprise Bank' : {
+                        "code" : "084"
+                    }                
+                },
+                 {
+                    'Diamond Bank' : {
+                        "code" : "063"
+                    }                
+                },
+                 {
+                    'Paycom' : {
+                        "code" : "305"
+                    }                
+                },
+                 {
+                    'SunTrust Bank' : {
+                        "code" : "100"
+                    }                
+                },
+                 {
+                    'Cellulant' : {
+                        "code" : "317"
+                    }                
+                },
+                 {
+                    'ASO Savings and Loans' : {
+                        "code" : "401"
+                    }                
+                },
+                 {
+                    'Heritage' : {
+                        "code" : "030"
+                    }                
+                },
+                 {
+                    'Jubilee Life Mortgage Bank' : {
+                        "code" : "402"
+                    }                
+                },
+                 {
+                    'GTBank Plc' : {
+                        "code" : "058"
+                    }                
+                },
+                 {
+                    'Union Bank' : {
+                        "code" : "032"
+                    }                
+                },
+                 {
+                    'Sterling Bank' : {
+                        "code" : "232"
+                    }                
+                },
+                 {
+                    'Polaris Bank' : {
+                        "code" : "076"
+                    }                
+                },
+                 {
+                    'Pagatech' : {
+                        "code" : "327"
+                    }                
+                },
+                 {
+                    'Coronation Merchant Bank' : {
+                        "code" : "559"
+                    }                
+                },
+                 {
+                    'FSDH' : {
+                        "code" : "601"
+                    }                
+                },
+                 {
+                    'Mkudi' : {
+                        "code" : "313"
+                    }                
+                },
+                 {
+                    'First City Monument Bank' : {
+                        "code" : "214"
+                    }                
+                },
+                 {
+                    'FET' : {
+                        "code" : "314"
+                    }                
+                },
+                 {
+                    'Trustbond' : {
+                        "code" : "523"
+                    }                
+                },
+                 {
+                    'GTMobile' : {
+                        "code" : "315"
+                    }                
+                },
+                {
+                    'United Bank for Africa' : {
+                        "code" : "033"
+                    }                
+                },
+                {
+                    'Access Bank' : {
+                        "code" : "044"
+                    }                
+                },
+            ],
+             "KE" : [
+                {
+                    'Kenya Commercial Bank Limited' : {
+                        "code" : "01"
+                    }                
+                },
+                 {
+                    'Co-operative Bank of Kenya Limited' : {
+                        "code" : "11"
+                    }                
+                },
+                 {
+                    'CFC Stanbic Kenya Limited' : {
+                        "code" : "31"
+                    }                
+                },
+                 {
+                    'NIC Bank Limited' : {
+                        "code" : "41"
+                    }                
+                },
+                 {
+                    'Jamii Bora Bank' : {
+                        "code" : "51"
+                    }                
+                },
+                 {
+                    'Housing Finance' : {
+                        "code" : "61"
+                    }                
+                },
+                 {
+                    'Oriental Commercial Bank Limited' : {
+                        "code" : "14"
+                    }                
+                },
+                 {
+                    'Victoria Commercial Bank Limited' : {
+                        "code" : "54"
+                    }                
+                },
+                 {
+                    'Commercial Bank of Africa Limited' : {
+                        "code" : "07"
+                    }                
+                },
+                 {
+                    'Equatorial Commercial Bank Limited' : {
+                        "code" : "49"
+                    }                
+                },
+                 {
+                    'Investments n Mortgages Bank Limited' : {
+                        "code" : "57"
+                    }                
+                },
+                 {
+                    'Imperial Bank Limited' : {
+                        "code" : "39"
+                    }                
+                },
+                 {
+                    'National Bank of Kenya Limited' : {
+                        "code" : "12"
+                    }                
+                },
+                 {
+                    'Gulf African Bank Limited' : {
+                        "code" : "72"
+                    }                
+                },
+                 {
+                    'Credit Bank Limited' : {
+                        "code" : "25"
+                    }                
+                },
+                 {
+                    'African Banking Corp. Bank Limited' : {
+                        "code" : "35"
+                    }                
+                },
+                 {
+                    'First Community Bank' : {
+                        "code" : "74"
+                    }                
+                },
+                 {
+                    'Guardian Bank Limited' : {
+                        "code" : "55"
+                    }                
+                },
+                 {
+                    'Prime Bank Limited' : {
+                        "code" : "10"
+                    }                
+                },
+                 {
+                    'Dubai Bank Kenya Limited' : {
+                        "code" : "20"
+                    }                
+                },
+                 {
+                    'Chase Bank Limited' : {
+                        "code" : "30"
+                    }                
+                },
+                 {
+                    'Paramount Universal Bank Limited' : {
+                        "code" : "50"
+                    }                
+                },
+                 {
+                    'Family Bank Ltd' : {
+                        "code" : "70"
+                    }                
+                },
+                 {
+                    'Consolidated Bank of Kenya Limited' : {
+                        "code" : "23"
+                    }                
+                },
+                 {
+                    'Middle East Bank Kenya Limited' : {
+                        "code" : "18"
+                    }                
+                },
+                 {
+                    'Diamond Trust Bank Limited' : {
+                        "code" : "63"
+                    }                
+                },
+                 {
+                    'Citibank N.A' : {
+                        "code" : "16"
+                    }                
+                },
+                 {
+                    'Trans-National Bank Limited' : {
+                        "code" : "26"
+                    }                
+                },
+                {
+                    'Citibank N.A' : {
+                        "code" : "68"
+                    }                
+                },
+                {
+                    'Equity Bank Limited' : {
+                        "code" : "66"
+                    }                
+                },
+                {
+                    'K-Rep Bank Limited' : {
+                        "code" : "76"
+                    }                
+                },
+                {
+                    'UBA Kenya Bank Ltd' : {
+                        "code" : "19"
+                    }                
+                },
+                {
+                    'Barclays Bank of Kenya' : {
+                        "code" : "10276"
+                    }                
+                },
+                {
+                    'MPESA' : {
+                        "code" : "254"
+                    }                
+                },
+             ],
+            "UG" : [
+                 {
+                    'Centenary Rural Development Bank Limited' : {
+                        "code" : "16"
+                    }                
+                },
+                 {
+                    'DFCU Bank' : {
+                        "code" : "TIG"
+                    }                
+                },
+                 {
+                    'Barclays Bank of Uganda Limited' : {
+                        "code" : "01"
+                    }                
+                },
+                 {
+                    'Orient Bank Ltd' : {
+                        "code" : "11"
+                    }                
+                },
+                 {
+                    'NC Bank Uganda Limited' : {
+                        "code" : "35"
+                    }                
+                },
+                 {
+                    'Diamond Trust Bank Uganda Limited' : {
+                        "code" : "19"
+                    }                
+                },
+                 {
+                    'Ecobank Uganda Limited' : {
+                        "code" : "29"
+                    }                
+                },
+                 {
+                    'Tropical Bank Ltd' : {
+                        "code" : "06"
+                    }                
+                },
+                 {
+                    'Bank of Baroda' : {
+                        "code" : "02"
+                    }                
+                },
+                 {
+                    'United Bank for Africa Uganda Ltd' : {
+                        "code" : "26"
+                    }                
+                }, {
+                    'Citibank Uganda Ltd' : {
+                        "code" : "22"
+                    }                
+                },
+                 {
+                    'Exim Bank (Uganda) Ltd' : {
+                        "code" : "32"
+                    }                
+                },
+                 {
+                    'Housing Finance Bank Ltd' : {
+                        "code" : "23"
+                    }                
+                },
+                 {
+                    'Bank of Africa Uganda Ltd' : {
+                        "code" : "13"
+                    }                
+                },
+                 {
+                    'Finance Trust Bank Ltd' : {
+                        "code" : "37"
+                    }                
+                },
+                 {
+                    'Commercial Bank of Africa (Uganda) Ltd' : {
+                        "code" : "36"
+                    }                
+                },
+                 {
+                    'KCB Bank Uganda Limited' : {
+                        "code" : "25"
+                    }                
+                },
+                 {
+                    'Stanbic Bank Uganda Ltd' : {
+                        "code" : "04"
+                    }                
+                },
+                 {
+                    'ABC Capital Bank Limited' : {
+                        "code" : "31"
+                    }                
+                },
+                 {
+                    'Equity Bank Uganda Ltd' : {
+                        "code" : "30"
+                    }                
+                },
+                 {
+                    'Standard Chartered Bank Uganda Limited' : {
+                        "code" : "08"
+                    }                
+                },
+                 {
+                    'Cairo International Bank Ltd' : {
+                        "code" : "18"
+                    }                
+                },
+            ],
+             "ZA" : [
+                 {
+                    'First National Bank' : {
+                        "code" : "FNB"
+                    }                
+                },
+                {
+                    'Nedbank Limited' : {
+                        "code" : "Nedbank"
+                    }                
+                },
+                {
+                    'Capitec Bank' : {
+                        "code" : "Capitec"
+                    }                
+                },
+                {
+                    'Investec Bank' : {
+                        "code" : "Investec"
+                    }                
+                },
+                {
+                    'ABSA' : {
+                        "code" : "ABSA"
+                    }                
+                },
+
+                {
+                    'African Bank' : {
+                        "code" : "AfricanBank"
+                    }                
+                },
+                {
+                    'Old Mutual Money Account' : {
+                        "code" : "OldMutualMoney"
+                    }                
+                },
+                {
+                    'Bidvest Bank' : {
+                        "code" : "Bidvest"
+                    }                
+                },
+                {
+                    'Discovery Bank' : {
+                        "code" : "DiscoveryBank"
+                    }                
+                },
+             ],
+             "TZ" : [
+                 {
+                    'FINCA MICROFINANCE BANK LIMITED' : {
+                        "code" : "TZ01000"
+                    }                
+                },
+                 {
+                    'CRDB BANK LTD' : {
+                        "code" : "TZ03000"
+                    }                
+                },
+                 {
+                    'PEOPLES BANK OF ZANZIBAR LTD' : {
+                        "code" : "TZ04000"
+                    }                
+                },
+                 {
+                    'STANDARD CHARTERED BANK (T) LTD' : {
+                        "code" : "TZ05000"
+                    }                
+                },
+                 {
+                    'STANBIC BANK (T) LTD' : {
+                        "code" : "TZ06000"
+                    }                
+                },
+                 {
+                    'GT BANK (T) LTD' : {
+                        "code" : "TZ061000"
+                    }                
+                },
+                 {
+                    'CITIBANK (T) LTD' : {
+                        "code" : "TZ08000"
+                    }                
+                },
+                 {
+                    'Eurafrica Bank' : {
+                        "code" : "TZ09000"
+                    }                
+                },
+                {
+                    'DIAMOND TRUST BANK (T) LTD' : {
+                        "code" : "TZ11000"
+                    }                
+                },
+                {
+                    'AKIBA COMMERCIAL BANK (T) LTD' : {
+                        "code" : "TZ12000"
+                    }                
+                },
+                {
+                    'EXIM BANK TANZANIA LTD' : {
+                        "code" : "TZ13000"
+                    }                
+                },
+                {
+                    'NBC (1997) LTD' : {
+                        "code" : "TZ15000"
+                    }                
+                },
+                {
+                    'NATIONAL MICROFINANCE BANK' : {
+                        "code" : "TZ16000"
+                    }                
+                },
+                {
+                    'KENYA COMMERCIAL BANK (T) LTD' : {
+                        "code" : "TZ17000"
+                    }                
+                },
+                {
+                    'HABIB BANK (T) LTD' : {
+                        "code" : "TZ18000"
+                    }                
+                },
+                {
+                    'INTERNATIONAL COMMERCIAL BANK (T) LTD' : {
+                        "code" : "TZ19000"
+                    }                
+                },
+                {
+                    'BARCLAYS BANK (T) LTD' : {
+                        "code" : "TZ20000"
+                    }                
+                },
+                {
+                    'I & M BANK (T) LTD' : {
+                        "code" : "TZ21000"
+                    }                
+                },
+                 {
+                    'COMMERCIAL BANK OF AFRICA (T) LTD' : {
+                        "code" : "TZ23000"
+                    }                
+                },
+                 {
+                    'DAR ES SALAAM COMMUNITY BANK LTD' : {
+                        "code" : "TZ24000"
+                    }                
+                },
+                 {
+                    'FEDERAL BANK OF THE MIDDLE EAST LTD' : {
+                        "code" : "TZ25000"
+                    }                
+                },
+                 {
+                    'NIC BANK LTD' : {
+                        "code" : "TZ26000"
+                    }                
+                },
+                 {
+                    'BANK OF BARODA (T) LTD' : {
+                        "code" : "TZ29000"
+                    }                
+                },
+                {
+                    'AZANIA BANCORP LTD' : {
+                        "code" : "TZ31000"
+                    }                
+                },
+                {
+                    'BANK M (TANZANIA) LTD' : {
+                        "code" : "TZ33000"
+                    }                
+                },
+                {
+                    'AFRICAN BANK CORP LTD' : {
+                        "code" : "TZ34000"
+                    }                
+                },
+                 {
+                    'ACCESS BANK (T) LTD' : {
+                        "code" : "TZ35000"
+                    }                
+                },
+                 {
+                    'BANK OF INDIA (T) LTD' : {
+                        "code" : "TZ36000"
+                    }                
+                },
+                 {
+                    'UNITED BANK OF AFRICA' : {
+                        "code" : "TZ38000"
+                    }                
+                },
+                 {
+                    'MKOMBOZI COMMERCIAL BANK LTD' : {
+                        "code" : "TZ39000"
+                    }                
+                },
+                 {
+                    'FIRST NATIONAL BANK (T) LTD' : {
+                        "code" : "TZ45000"
+                    }                
+                },
+                {
+                    'AMANA BANK' : {
+                        "code" : "TZ46000"
+                    }                
+                },
+                {
+                    'EQUITY BANK (T) LTD' : {
+                        "code" : "TZ47000"
+                    }                
+                },
+                {
+                    'COVENANT BANK LTD' : {
+                        "code" : "TZ49000"
+                    }                
+                },
+                {
+                    'UBL' : {
+                        "code" : "TZ50000"
+                    }                
+                },
+                 {
+                    'MAENDELEO BANK' : {
+                        "code" : "TZ51000"
+                    }                
+                },
+                 {
+                    'BANK OF TANZANIA DAR ES SALAAM' : {
+                        "code" : "TZ670101"
+                    }                
+                },
+                 {
+                    'Ecobank Tanzania' : {
+                        "code" : "TZ674000"
+                    }                
+                },
+                 {
+                    'CANARA BANK (TANZANIA) LTD' : {
+                        "code" : "TZ675801"
+                    }                
+                },
+                 {
+                    'MWALIMU COMMERCIAL BANK PLC' : {
+                        "code" : "TZ675900"
+                    }                
+                },
+                {
+                    'UCHUMI COMMERCIAL BANK LTD' : {
+                        "code" : "TZ76000"
+                    }                
+                },
+                {
+                    'KILIMANJARO CO-OPERATIVE BANK LTD' : {
+                        "code" : "TZ78000"
+                    }                
+                },
+                {
+                    'AMANA BANK' : {
+                        "code" : "TZAMA00"
+                    }                
+                },
+                {
+                    'EFATHA BANK LTD' : {
+                        "code" : "TZEFA00"
+                    }                
+                },
+                {
+                    'EQUITY BANK (T) LTD' : {
+                        "code" : "TZEQB00"
+                    }                
+                },
+                {
+                    'BANK OF AFRICA (T) LTD' : {
+                        "code" : "TZ78000"
+                    }                
+                },
+                {
+                    'FIRST NATIONAL BANK (T) LTD' : {
+                        "code" : "TZFIR00"
+                    }                
+                },
+                {
+                    'FNB TANZANIA LTD' : {
+                        "code" : "TZFNB"
+                    }                
+                },
+                {
+                    'NIC BANK LTD' : {
+                        "code" : "TZSFIC00"
+                    }                
+                },
+                {
+                    'TANZANIA POSTAL BANK' : {
+                        "code" : "TZTAP00"
+                    }                
+                },
+                {
+                    'TANZANIA INVESTMENT BANK LTD' : {
+                        "code" : "TZTIB00"
+                    }                
+                },
+                {
+                    'TANZANIA WOMEN’S BANK LTD' : {
+                        "code" : "TZTWB00"
+                    }                
+                },
+                {
+                    'TWIGA BANCORP LTD' : {
+                        "code" : "TZTWI00"
+                    }                
+                },       
+            ]  
+        };
+
+        $("#currency").change(function(){
+            let amount = $("#amount").val();
+            let currency = $("#currency").val();
+            console.log(amount);
+            console.log(currency);
+            $.post("https://api.ravepay.co/v2/services/confluence", 
+            {
+                "secret_key"           : "FLWSECK-7daf7a6c086e0db802d310e3bb9fe239-X",
+                "service"              : "rates_convert",
+                "service_method"       : "post",
+                "service_version"      : "v1",
+                "service_channel"      : "transactions",
+                "service_channel_group": "merchants",
+                "service_payload": {
+                    "FromCurrency": currency,
+                    "ToCurrency": "NGN",
+                    "Amount": amount
+                },
+                'Content-Type': 'application/json'
+            },
+            function(result){
+                let amount = document.getElementById("amount");
+                let val = document.getElementById("val");
+                let e = document.getElementById("submit");
+                console.log(result);
+                document.getElementById("exchange").innerHTML = "<strong> "+ currency + result.data.FromAmount + " = "+ result.data.ToCurrencyName + result.data.ToAmount + "</strong> at <strong>" + currency + result.data.Rate +  " </strong> rate";    
+
+                if(amount != null){
+                    $("#pay").addClass("disabled");
+                }
+
+                var $dropdown = $("#dropdown");
+                let cont;
+                switch (currency){
+                    case "KES":
+                        $dropdown.empty();
+                        cont = countries.KE;
+                        countries.KE.map(bank => {
+                        let newVal = Object.values(bank);
+                            newVal.map(_ => {
+                                $dropdown.append($("<option />").val(_.code).text(Object.keys(bank))
+                                );
+                            });
+                        })
+                        break;
+                    case "UGX":
+                        $dropdown.empty();
+                        cont = countries.UG;
+                        countries.UG.map(bank => {
+                        let newVal = Object.values(bank);
+                            newVal.map(_ => {
+                                $dropdown.append($("<option />").val(_.code).text(Object.keys(bank))
+                                );
+                            });
+                        })
+                        break;
+                    case "ZMW":
+                        $dropdown.empty();
+                        cont = countries.ZA;
+                        countries.ZA.map(bank => {
+                        let newVal = Object.values(bank);
+                            newVal.map(_ => {
+                                $dropdown.append($("<option />").val(_.code).text(Object.keys(bank))
+                                );
+                            });
+                        })
+                        break;
+                    case "TZS":
+                        $dropdown.empty();
+                        cont = countries.TZ;
+                        countries.TZ.map(bank => {
+                        let newVal = Object.values(bank);
+                            newVal.map(_ => {
+                                $dropdown.append($("<option />").val(_.code).text(Object.keys(bank))
+                                );
+                            });
+                        })
+                        break;
+                    case "NGN":
+                        $dropdown.empty();
+                        cont = countries.NG;
+                        countries.NG.map(bank => {
+                        let newVal = Object.values(bank);
+                            newVal.map(_ => {
+                                $dropdown.append($("<option />").val(_.code).text(Object.keys(bank))
+                                );
+                            });
+                        })
+                        break;
+                    default:
+                        cont = countries.NG;
+                        countries.NG.map(bank => {
+                            let newVal = Object.values(bank);
+                            newVal.map(_ => {
+                                $dropdown.append($("<option />").val(_.code).text(Object.keys(bank))
+                                );
+                            });
+                        });  
+                }
+            });
+        });
+
+        $("#pay").click(function(event){
+            event.preventDefault();
+            let bankValue = $('#dropdown').find(":selected").val();
+            let accNo = $('#accNo').val();
+            let amount = $('#amount').val();
+            let currency = $('#currency').find(":selected").text();
+            let name = $('#name').val();
+            let spinner = $('#spinner');
+            let msg = $('#msg');
+
+            spinner.css({display: "block"});
+
+            console.log(bankValue);
+
+            var settings = {
+                "url": "https://api.ravepay.co/v2/gpx/transfers/create",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "account_bank":bankValue,
+                    "account_number": accNo,
+                    "amount": amount,
+                    "seckey":"FLWSECK_TEST-bcdc49aa37a21e3e56d19d4f0b82c3b3-X",
+                    "narration":"New transfer",
+                    "currency": currency,
+                    "reference":"mk-902369-jk", // Modify for each transaction
+                    "beneficiary_name":name
+                    }),
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                spinner.css({display: "none"});
+                document.getElementById("msg").innerHTML = response.status;
+                $.ajax({
+                    type: 'POST',  
+                    url: 'test.php',  // Php script goes here
+                    data: { response: response },
+                    success: function(response) {
+                        content.html(response);
+                    }
+                });
+            });
+
+        });
+        </script>
+    </body>
+</html>
